@@ -1,7 +1,8 @@
 package model;
 
+import model.interfaces.Emprestavel;
 
-public class Livro {
+public class Livro implements Emprestavel {
     private String titulo;
     private String autor;
     private String categoria;
@@ -56,6 +57,29 @@ public class Livro {
         this.emprestado = emprestado;
     }
 
+    @Override
+    public boolean Emprestar() {
+        if (quantidadeDisponivel > 0 && !emprestado) {
+            quantidadeDisponivel--;
+            emprestado = true;
+            return true;
+        } else {
+            System.out.println("Não há livros disponíveis ou o livro já está emprestado.");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean Devolver() {
+        if (emprestado && quantidadeDisponivel >= 0) {
+            quantidadeDisponivel++;
+            emprestado = false;
+            return true;
+        } else {
+            System.out.println("O livro não está emprestado ou já foi devolvido.");
+            return false;
+        }
+    }
     @Override
     public String toString() {
         return "Livro{" +
