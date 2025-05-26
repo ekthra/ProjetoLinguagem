@@ -220,6 +220,11 @@ public class Main {
         System.out.print("Digite o título do livro: ");
         String tituloLivro = sc.nextLine();
 
+        if (professor.temLivroEmprestado(tituloLivro)) {
+            System.out.println("Professor já possui este livro emprestado!");
+            return;
+        }
+
         Livro livro = bibliotecaController.buscarLivro(tituloLivro);
         if (livro == null) {
             System.out.println("Livro não encontrado!");
@@ -233,6 +238,7 @@ public class Main {
 
         if (bibliotecaController.emprestarLivro(tituloLivro) &&
                 professorController.incrementarLivrosEmprestados(nomeProfessor)) {
+            professor.adicionarLivroEmprestado(tituloLivro);
             System.out.println("Livro emprestado com sucesso!");
         } else {
             System.out.println("Erro ao realizar o empréstimo!");
@@ -259,6 +265,11 @@ public class Main {
         System.out.print("Digite o título do livro: ");
         String tituloLivro = sc.nextLine();
 
+        if (aluno.temLivroEmprestado(tituloLivro)) {
+            System.out.println("Aluno já possui este livro emprestado!");
+            return;
+        }
+
         Livro livro = bibliotecaController.buscarLivro(tituloLivro);
         if (livro == null) {
             System.out.println("Livro não encontrado!");
@@ -272,6 +283,7 @@ public class Main {
 
         if (bibliotecaController.emprestarLivro(tituloLivro) &&
                 alunoController.incrementarLivrosEmprestados(nomeAluno)) {
+            aluno.adicionarLivroEmprestado(tituloLivro);
             System.out.println("Livro emprestado com sucesso!");
         } else {
             System.out.println("Erro ao realizar o empréstimo!");
@@ -411,40 +423,6 @@ public class Main {
         }
     }
 
-    private static void devolverLivroProfessor(Scanner sc, ProfessorController professorController,
-                                               BibliotecaController bibliotecaController) {
-        System.out.println("\n=== DEVOLUÇÃO DE LIVRO POR PROFESSOR ===");
-        System.out.print("Digite o nome do professor: ");
-        String nomeProfessor = sc.nextLine();
-
-        Professor professor = professorController.buscarProfessor(nomeProfessor);
-        if (professor == null) {
-            System.out.println("Professor não encontrado!");
-            return;
-        }
-
-        if (professor.getLivrosEmprestados() <= 0) {
-            System.out.println("Professor não possui livros emprestados!");
-            return;
-        }
-
-        System.out.print("Digite o título do livro: ");
-        String tituloLivro = sc.nextLine();
-
-        Livro livro = bibliotecaController.buscarLivro(tituloLivro);
-        if (livro == null) {
-            System.out.println("Livro não encontrado!");
-            return;
-        }
-
-        if (bibliotecaController.devolverLivro(tituloLivro) &&
-                professorController.decrementarLivrosEmprestados(nomeProfessor)) {
-            System.out.println("Livro devolvido com sucesso!");
-        } else {
-            System.out.println("Erro ao realizar a devolução!");
-        }
-    }
-
     private static void devolverLivroAluno(Scanner sc, AlunoController alunoController,
                                            BibliotecaController bibliotecaController) {
         System.out.println("\n=== DEVOLUÇÃO DE LIVRO POR ALUNO ===");
@@ -465,6 +443,11 @@ public class Main {
         System.out.print("Digite o título do livro: ");
         String tituloLivro = sc.nextLine();
 
+        if (!aluno.temLivroEmprestado(tituloLivro)) {
+            System.out.println("Aluno não possui este livro emprestado!");
+            return;
+        }
+
         Livro livro = bibliotecaController.buscarLivro(tituloLivro);
         if (livro == null) {
             System.out.println("Livro não encontrado!");
@@ -473,6 +456,47 @@ public class Main {
 
         if (bibliotecaController.devolverLivro(tituloLivro) &&
                 alunoController.decrementarLivrosEmprestados(nomeAluno)) {
+            aluno.removerLivroEmprestado(tituloLivro);
+            System.out.println("Livro devolvido com sucesso!");
+        } else {
+            System.out.println("Erro ao realizar a devolução!");
+        }
+    }
+
+    private static void devolverLivroProfessor(Scanner sc, ProfessorController professorController,
+                                               BibliotecaController bibliotecaController) {
+        System.out.println("\n=== DEVOLUÇÃO DE LIVRO POR PROFESSOR ===");
+        System.out.print("Digite o nome do professor: ");
+        String nomeProfessor = sc.nextLine();
+
+        Professor professor = professorController.buscarProfessor(nomeProfessor);
+        if (professor == null) {
+            System.out.println("Professor não encontrado!");
+            return;
+        }
+
+        if (professor.getLivrosEmprestados() <= 0) {
+            System.out.println("Professor não possui livros emprestados!");
+            return;
+        }
+
+        System.out.print("Digite o título do livro: ");
+        String tituloLivro = sc.nextLine();
+
+        if (!professor.temLivroEmprestado(tituloLivro)) {
+            System.out.println("Professor não possui este livro emprestado!");
+            return;
+        }
+
+        Livro livro = bibliotecaController.buscarLivro(tituloLivro);
+        if (livro == null) {
+            System.out.println("Livro não encontrado!");
+            return;
+        }
+
+        if (bibliotecaController.devolverLivro(tituloLivro) &&
+                professorController.decrementarLivrosEmprestados(nomeProfessor)) {
+            professor.removerLivroEmprestado(tituloLivro);
             System.out.println("Livro devolvido com sucesso!");
         } else {
             System.out.println("Erro ao realizar a devolução!");

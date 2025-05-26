@@ -1,9 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Pessoa {
     private String nome, cpf, email;
     private int livrosEmprestados;
     private int limiteEmprestimos;
+    private List<String> livrosEmprestadosList = new ArrayList<>();  // List of book titles
 
     public Pessoa(String nome, String cpf, String email, int livrosEmprestados, int limiteEmprestimos) {
         this.nome = nome;
@@ -51,6 +55,25 @@ public abstract class Pessoa {
         this.limiteEmprestimos = limiteEmprestimos;
     }
 
+    public List<String> getLivrosEmprestadosList() {
+        return livrosEmprestadosList;
+    }
+
+    public void setLivrosEmprestadosList(List<String> livrosEmprestadosList) {
+        this.livrosEmprestadosList = livrosEmprestadosList;
+    }
+
+    public boolean temLivroEmprestado(String tituloLivro) {
+        return livrosEmprestadosList.contains(tituloLivro);
+    }
+
+    public void adicionarLivroEmprestado(String tituloLivro) {
+        livrosEmprestadosList.add(tituloLivro);
+    }
+
+    public void removerLivroEmprestado(String tituloLivro) {
+        livrosEmprestadosList.remove(tituloLivro);
+    }
 
     @Override
     public String toString() {
