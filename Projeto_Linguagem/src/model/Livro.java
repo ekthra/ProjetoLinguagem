@@ -59,12 +59,14 @@ public class Livro implements Emprestavel {
 
     @Override
     public boolean Emprestar() {
-        if (quantidadeDisponivel > 0 && !emprestado) {
+        if (quantidadeDisponivel > 0) {
             quantidadeDisponivel--;
-            emprestado = true;
+            if (quantidadeDisponivel == 0) {
+                emprestado = true;
+            }
             return true;
         } else {
-            System.out.println("Não há livros disponíveis ou o livro já está emprestado.");
+            System.out.println("Não há livros disponíveis.");
             return false;
         }
     }
@@ -80,6 +82,7 @@ public class Livro implements Emprestavel {
             return false;
         }
     }
+
     @Override
     public String toString() {
         return "Livro{" +
